@@ -18,7 +18,7 @@ func InsertoRegistro(u models.Usuario) (string, bool, error) {
 	u.Password, _ = EncriptarPassword(u.Password)
 
 	result, err := col.InsertOne(ctx, u)
-	if err == nil {
+	if err != nil {
 		return "", false, err
 	}
 

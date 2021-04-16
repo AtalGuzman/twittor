@@ -42,6 +42,7 @@ func Registro(w http.ResponseWriter, r *http.Request) {
 
 	if !status {
 		http.Error(w, "NO SE HA LOGRADO INSERTAR EL REGISTRO DEL USUARIO", 500)
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
