@@ -1,0 +1,29 @@
+package bd
+
+import (
+	"context"
+
+	"github.com/AtalGuzman/twittor/models"
+	"go.mongodb.org/mongo-driver/bson"
+)
+
+/*ChequeoYaExisteUsuario: valida si un usuario ya existe*/
+func ChequeoYaExisteUsuario(email string) (models.Usuario, bool, string) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	db := MongoCN.Database("twittor")
+	col := db.Collection("usuarios")
+
+	condicion := bson.M{"email": email}
+
+	var resultado models.Usuario
+
+	err := col.FindOne(ctx, condicion).Decode(&resultado)
+	ID := resultado.ID.Hex()
+
+	if err != nil {
+		return resultado, false, ID
+	}
+	return resultado, true, ID
+}
