@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+/*InsertoRegistro: Inserta datos de usuarios en la bd*/
 func InsertoRegistro(u models.Usuario) (string, bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 

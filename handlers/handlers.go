@@ -16,6 +16,8 @@ func Manejadores() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/registro", middleW.ChequeoBd(routers.Registro)).Methods("POST")
+	router.HandleFunc("/login", middleW.ChequeoBd(routers.Login)).Methods("POST")
+	router.HandleFunc("/verperfil", middleW.ChequeoBd(middleW.ValidoJWT(routers.VerPerfil))).Methods("GET")
 
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
