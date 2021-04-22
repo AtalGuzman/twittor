@@ -36,6 +36,8 @@ func Manejadores2() {
 	gb.Post("/login", middleW.ChequeoBd2, routers.Login2)
 	gb.Get("/verperfil", middleW.ChequeoBd2, middleW.ValidoJWT2, routers.VerPerfil2)
 	gb.Put("/modificarPerfil", middleW.ChequeoBd2, middleW.ValidoJWT2, routers.ModificarPerfil2)
+	gb.Post("/tweet", middleW.ChequeoBd2, middleW.ValidoJWT2, routers.GraboTweet)
+	gb.Get("/leotweet", middleW.ChequeoBd2, middleW.ValidoJWT2, routers.LeoTweets)
 
 	PORT := os.Getenv("PORT")
 	if PORT == "" {
