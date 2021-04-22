@@ -13,5 +13,5 @@ func main() {
 		return
 	}
 
-	handlers.Manejadores()
+	handlers.Manejadores2()
 }

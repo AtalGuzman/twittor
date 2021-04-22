@@ -6,6 +6,7 @@ import (
 
 	"github.com/AtalGuzman/twittor/bd"
 	"github.com/AtalGuzman/twittor/models"
+	gb "github.com/gogearbox/gearbox"
 )
 
 func Registro(w http.ResponseWriter, r *http.Request) {
@@ -46,4 +47,50 @@ func Registro(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func Registro2(ctx gb.Context) {
+	var t models.Usuario
+	err := ctx.ParseBody(&t)
+
+	if err != nil {
+		ctx.Status(400)
+		ctx.SendString("ERROR DECODIFICACION JSON\n" + err.Error())
+		return
+	}
+
+	if len(t.Email) == 0 {
+		ctx.Status(400)
+		ctx.SendString("Email vacío")
+		return
+	}
+
+	if len(t.Password) < 6 {
+		ctx.Status(400)
+		ctx.SendString("Password demasiado corto. Debe ser al menos de 6 caractéres")
+		return
+	}
+
+	_, encontrado, _ := bd.ChequeoYaExisteUsuario(t.Email)
+
+	if encontrado {
+		ctx.Status(400)
+		ctx.SendString("El email ya ha sido usado")
+		return
+	}
+
+	_, status, err := bd.InsertoRegistro(t)
+	if err != nil {
+		ctx.Status(500)
+		ctx.SendString("Error al guardar en la bd")
+		return
+	}
+
+	if !status {
+		ctx.Status(500)
+		ctx.SendString("Error al insertar en la bd")
+		return
+	}
+
+	ctx.Status(http.StatusCreated)
 }
