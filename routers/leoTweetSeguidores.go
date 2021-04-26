@@ -9,12 +9,12 @@ import (
 )
 
 func LeoTweetsSeguidores(w http.ResponseWriter, r *http.Request) {
-	if len(r.URL.Query().Get("pagina")) < 1 {
+	if len(r.URL.Query().Get("page")) < 1 {
 		http.Error(w, "Debe agregar la pagina", http.StatusBadRequest)
 		return
 	}
 
-	pagina, err := strconv.Atoi(r.URL.Query().Get("pagina"))
+	pagina, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
 		http.Error(w, "Debe agregar la pagina", http.StatusBadRequest)
 		return
