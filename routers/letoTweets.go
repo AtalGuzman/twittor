@@ -1,6 +1,8 @@
 package routers
 
 import (
+	"encoding/json"
+	"net/http"
 	"strconv"
 
 	"github.com/AtalGuzman/twittor/bd"
@@ -37,5 +39,41 @@ func LeoTweets(gb gearbox.Context) {
 	gb.Set("content-type", "application/json")
 	gb.Status(gearbox.StatusCreated)
 	gb.SendJSON(resultados)
+
+}
+
+func LeoTweets2(rw http.ResponseWriter, r *http.Request) {
+
+	ID := r.URL.Query().Get("id")
+
+	if len(ID) < 1 {
+		http.Error(rw, "Debe enviar el parámetro ID", http.StatusBadRequest)
+		return
+	}
+
+	pagina := r.URL.Query().Get("pagina")
+
+	if len(pagina) < 1 {
+		http.Error(rw, "Debe enviar el parámetro ID", http.StatusBadRequest)
+		return
+	}
+
+	n_pagina, err := strconv.Atoi(pagina)
+
+	if err != nil {
+		http.Error(rw, "Error página escogida", http.StatusBadRequest)
+		return
+	}
+
+	resultados, status := bd.LeoTweets(ID, int64(n_pagina))
+
+	if !status {
+		http.Error(rw, "Error al leer los tweets", http.StatusBadRequest)
+		return
+	}
+
+	rw.Header().Set("Content-type", "application/json")
+	rw.WriteHeader(http.StatusAccepted)
+	json.NewEncoder(rw).Encode(resultados)
 
 }
